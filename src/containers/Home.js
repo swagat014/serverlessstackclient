@@ -66,7 +66,7 @@ export default function Home() {
     function renderLander() {
         return (
             <div className="lander">
-                <h1>NoteCraft</h1>
+                <h1>NoteApp</h1>
                 <p className="text-muted">A simple note taking app</p>
                 <div className="box">
                     <LinkContainer to="/signup">

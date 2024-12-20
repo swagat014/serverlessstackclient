@@ -1,0 +1,14 @@
+@media all and (min-width: 480px) {
+    .EmailChange {
+        padding: 60px 0;
+    }
+
+    .EmailChange form {
+        margin: 0 auto;
+        max-width: 320px;
+    }
+
+    .EmailChange h2 {
+        padding-bottom: 25px;
+    }
+}

@@ -7,6 +7,7 @@ import Notes from "./containers/Notes";
 import ForgetPassword from "./containers/ForgetPassword";
 import { Switch, Route } from "react-router-dom";
 import Home from "./containers/Home";
+import EmailUpdate from "./containers/EmailUpdate";
 export default function Routess() {
     return (<>
         <Switch>
@@ -26,8 +27,11 @@ export default function Routess() {
                 <Notes />
             </Route>
             <Route exact path="/forget">
-        <ForgetPassword />
-      </Route>
+                <ForgetPassword />
+            </Route>
+            <Route exact path="/emailchange">
+            <EmailUpdate/>
+            </Route>
             <Route>
                 <NotFound />
             </Route>
