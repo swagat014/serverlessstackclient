@@ -56,12 +56,13 @@ body {
 }
 
 .note-image {
-    width: 50px; /* Increase from 50px to 100px */
-    height: 50px; /* Increase from 50px to 100px */
+    width: 80px;
+    height: 80px;
     object-fit: cover;
-    border-radius: 5px; /* Optional: adjust for rounded corners */
-    margin-right: 15px; /* Keep spacing consistent */
+    border-radius: 5px;
+    margin-right: 12px;
 }
+
 
 .Home .notes .font-weight-bold {
     font-family: "Ubuntu", sans-serif;

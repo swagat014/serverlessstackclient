@@ -48,7 +48,7 @@ export default function Home() {
         setFilteredNotes(
             notes.filter((note) =>
                 note.content.toLowerCase().includes(term) ||
-                (note.image && note.image.toLowerCase().includes(term))
+                (note.attachment && note.attachment.toLowerCase().includes(term))
             )
         );
     }
@@ -73,16 +73,10 @@ export default function Home() {
                                 {imageUrl && (
                                     <img
                                         src={imageUrl}
-                                        alt="Note"
-                                        className="note-image mr-3"
-                                        style={{
-                                            width: "100px", // Adjusted size for better visibility
-                                            height: "100px",
-                                            objectFit: "cover",
-                                            borderRadius: "5px",
-                                        }}
+                                        alt={`Note ${content.trim().split("\n")[0] || "Image"}`}
+                                        className="note-image"
                                         onError={(e) =>
-                                            (e.target.src = "/path/to/default-image.png")
+                                            (e.target.src = "/default-image.png")
                                         }
                                     />
                                 )}
@@ -135,7 +129,11 @@ export default function Home() {
                         onChange={handleSearch}
                     />
                 </Form>
-                <ListGroup>{!isLoading && renderNotesList(filteredNotes)}</ListGroup>
+                {!isLoading ? (
+                    <ListGroup>{renderNotesList(filteredNotes)}</ListGroup>
+                ) : (
+                    <p>Loading notes...</p>
+                )}
             </div>
         );
     }
