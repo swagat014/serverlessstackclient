@@ -7,9 +7,13 @@ import { BsPencilSquare } from "react-icons/bs";
 import { LinkContainer } from "react-router-bootstrap";
 import { API } from "aws-amplify";
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import "./Home.css";
+
 export default function Home() {
     const [notes, setNotes] = useState([]);
+    const [filteredNotes, setFilteredNotes] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [greet, setGreet] = useState();
     const { isAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +29,7 @@ export default function Home() {
                 const { attributes } = user;
                 setGreet(attributes.email);
                 setNotes(notes);
+                setFilteredNotes(notes);
             } catch (e) {
                 onError(e);
             }
@@ -33,9 +38,22 @@ export default function Home() {
         onLoad();
     }, [isAuthenticated]);
 
-    function loadNotes() {
-        return API.get("notes", "/notes");
+    async function loadNotes() {
+        return await API.get("notes", "/notes");
     }
+
+    function handleSearch(event) {
+        const term = event.target.value.toLowerCase();
+        setSearchTerm(term);
+        setFilteredNotes(
+            notes.filter((note) =>
+                note.content.toLowerCase().includes(term) ||
+                (note.image && note.image.toLowerCase().includes(term))
+            )
+        );
+    }
+
+    const BASE_URL = "https://notes-api-uploads.s3.us-east-1.amazonaws.com";
 
     function renderNotesList(notes) {
         return (
@@ -46,28 +64,50 @@ export default function Home() {
                         <span className="ml-2 font-weight-bold">Create a new note</span>
                     </ListGroup.Item>
                 </LinkContainer>
-                {notes.map(({ noteId, content, createdAt }) => (
-                    <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-                        <ListGroup.Item action>
-                            <span className="font-weight-bold">
-                                {content.trim().split("\n")[0]}
-                            </span>
-                            <br />
-                            <span className="text-muted">
-                                Created: {new Date(createdAt).toLocaleString()}
-                            </span>
-                        </ListGroup.Item>
-                    </LinkContainer>
-                ))}
+                {notes.map(({ noteId, content, createdAt, attachment }) => {
+                    const imageUrl = attachment ? `${BASE_URL}/${attachment}` : null;
+
+                    return (
+                        <LinkContainer key={noteId} to={`/notes/${noteId}`}>
+                            <ListGroup.Item action className="d-flex align-items-center">
+                                {imageUrl && (
+                                    <img
+                                        src={imageUrl}
+                                        alt="Note"
+                                        className="note-image mr-3"
+                                        style={{
+                                            width: "100px", // Adjusted size for better visibility
+                                            height: "100px",
+                                            objectFit: "cover",
+                                            borderRadius: "5px",
+                                        }}
+                                        onError={(e) =>
+                                            (e.target.src = "/path/to/default-image.png")
+                                        }
+                                    />
+                                )}
+                                <div>
+                                    <span className="font-weight-bold">
+                                        {content.trim().split("\n")[0]}
+                                    </span>
+                                    <br />
+                                    <span className="text-muted">
+                                        Created: {new Date(createdAt).toLocaleString()}
+                                    </span>
+                                </div>
+                            </ListGroup.Item>
+                        </LinkContainer>
+                    );
+                })}
             </>
-        )
+        );
     }
 
     function renderLander() {
         return (
             <div className="lander">
                 <h1>NoteApp</h1>
-                <p className="text-muted">A simple note taking app</p>
+                <p className="text-muted">A simple note-taking app</p>
                 <div className="box">
                     <LinkContainer to="/signup">
                         <Button variant="success">Sign up</Button>
@@ -75,7 +115,6 @@ export default function Home() {
                     <LinkContainer to="/login">
                         <Button className="ml-4" variant="primary">Login</Button>
                     </LinkContainer>
-
                 </div>
             </div>
         );
@@ -88,7 +127,15 @@ export default function Home() {
                     Welcome, <span>{greet}</span>
                 </h2>
                 <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
-                <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+                <Form className="mb-3">
+                    <Form.Control
+                        type="text"
+                        placeholder="Search notes..."
+                        value={searchTerm}
+                        onChange={handleSearch}
+                    />
+                </Form>
+                <ListGroup>{!isLoading && renderNotesList(filteredNotes)}</ListGroup>
             </div>
         );
     }
@@ -99,4 +146,3 @@ export default function Home() {
         </div>
     );
 }
-

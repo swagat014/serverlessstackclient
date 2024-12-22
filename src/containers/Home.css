@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Ubuntu", Arial, sans-serif;
+}
 
 .Home .lander {
     padding: 80px 0;
@@ -22,4 +30,52 @@
 
 .box {
     margin-top: 30px;
+}
+
+.Home .notes {
+    margin-top: 20px;
+}
+
+.Home .notes .form-control {
+    margin-bottom: 20px;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 16px;
+}
+
+.Home .notes .list-group-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.Home .notes .list-group-item:hover {
+    background-color: #f1f3f5;
+}
+
+.note-image {
+    width: 50px; /* Increase from 50px to 100px */
+    height: 50px; /* Increase from 50px to 100px */
+    object-fit: cover;
+    border-radius: 5px; /* Optional: adjust for rounded corners */
+    margin-right: 15px; /* Keep spacing consistent */
+}
+
+.Home .notes .font-weight-bold {
+    font-family: "Ubuntu", sans-serif;
+    font-size: 18px;
+    color: #333;
+}
+
+.Home .notes .text-muted {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* Utility for consistent form styling */
+.notes .form-control {
+    margin-bottom: 20px;
+    font-size: 16px;
 }
