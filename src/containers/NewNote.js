@@ -5,6 +5,7 @@ import { API } from "aws-amplify";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
 import config from "../config";
+
 import "./NewNote.css";
 
 // Function to convert a file to base64

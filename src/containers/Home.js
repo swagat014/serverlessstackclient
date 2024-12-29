@@ -100,7 +100,7 @@ export default function Home() {
     function renderLander() {
         return (
             <div className="lander">
-                <h1>NoteApp</h1>
+                <h1>Scratch</h1>
                 <p className="text-muted">A simple note-taking app</p>
                 <div className="box">
                     <LinkContainer to="/signup">
@@ -117,17 +117,17 @@ export default function Home() {
     function renderNotes() {
         return (
             <div className="notes">
-                <h2>
+                {/* <h2>
                     Welcome, <span>{greet}</span>
-                </h2>
+                </h2> */}
                 <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
                 <Form className="mb-3">
-                    <Form.Control
+                    {/* <Form.Control
                         type="text"
                         placeholder="Search notes..."
                         value={searchTerm}
                         onChange={handleSearch}
-                    />
+                    /> */}
                 </Form>
                 {!isLoading ? (
                     <ListGroup>{renderNotesList(filteredNotes)}</ListGroup>

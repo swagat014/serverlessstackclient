@@ -42,7 +42,7 @@ function App() {
         <Navbar collapseOnSelect bg="light" expand="md">
           <LinkContainer to="/">
             <Navbar.Brand className="font-weight-bold text-muted">
-              NoteApp
+              Scratch
             </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle />
@@ -50,9 +50,7 @@ function App() {
             <Nav activeKey={window.location.pathname}>
               {isAuthenticated ? (
                 <>
-                  <LinkContainer to="/emailchange">
-                    <Nav.Link>Change Email?</Nav.Link>
-                  </LinkContainer>
+                 
                   <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                 </>
               ) : (
