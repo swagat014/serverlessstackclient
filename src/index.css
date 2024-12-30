@@ -6,6 +6,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   font-family: "Open Sans", sans-serif;
+  /* background-image: url(back1.jpg);
+  background-repeat: repeat; 
+  background-size: cover;
+  background-position: center;
+  backdrop-filter: blur(px) !important; */
 }
 
 h1,

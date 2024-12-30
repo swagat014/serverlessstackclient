@@ -1,6 +1,6 @@
 const config = {
     
-    MAX_ATTACHMENT_SIZE: 5000000,
+    MAX_ATTACHMENT_SIZE: 50000000,
 
     s3: {
         REGION: "us-east-1", // Ensure the region is correct for your S3 bucket
