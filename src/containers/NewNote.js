@@ -47,7 +47,6 @@ export default function NewNote() {
         }
 
         setIsLoading(true);
-
         try {
              // Upload file to S3 if it exists
              const attachment = file.current

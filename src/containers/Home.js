@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
-// import { Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { BsPencilSquare } from "react-icons/bs";
 import { LinkContainer } from "react-router-bootstrap";
 import { API } from "aws-amplify";
@@ -11,10 +11,10 @@ import Form from "react-bootstrap/Form";
 import "./Home.css";
 
 export default function Home() {
-    // const [notes, setNotes] = useState([]);
+    const [notes, setNotes] = useState([]);
     const [filteredNotes, setFilteredNotes] = useState([]);
-    // const [searchTerm, setSearchTerm] = useState("");
-    // const [greet, setGreet] = useState();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [greet, setGreet] = useState();
     const { isAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -25,10 +25,17 @@ export default function Home() {
             }
             try {
                 const notes = await loadNotes();
-                // const user = await Auth.currentAuthenticatedUser();
-                // const { attributes } = user;
-                // setGreet(attributes.email);
-                // setNotes(notes);
+                const user = await Auth.currentAuthenticatedUser();
+                const { attributes } = user;
+                const email = attributes.email;
+
+                // Extract the part of the email before '@gmail.com' and remove any numbers
+                const name = email.split('@')[0].replace(/[0-9]/g, '');
+
+                // Set the greeting message
+                setGreet(`${name}`);
+                setNotes(notes);
+
                 setFilteredNotes(notes);
             } catch (e) {
                 onError(e);
@@ -42,16 +49,16 @@ export default function Home() {
         return await API.get("notes", "/notes");
     }
 
-    // function handleSearch(event) {
-    //     const term = event.target.value.toLowerCase();
-    //     setSearchTerm(term);
-    //     setFilteredNotes(
-    //         notes.filter((note) =>
-    //             note.content.toLowerCase().includes(term) ||
-    //             (note.attachment && note.attachment.toLowerCase().includes(term))
-    //         )
-    //     );
-    // }
+    function handleSearch(event) {
+        const term = event.target.value.toLowerCase();
+        setSearchTerm(term);
+        setFilteredNotes(
+            notes.filter((note) =>
+                note.content.toLowerCase().includes(term) ||
+                (note.attachment && note.attachment.toLowerCase().includes(term))
+            )
+        );
+    }
 
     const BASE_URL = "https://note-api-uploads.s3.us-east-1.amazonaws.com";
 
@@ -65,7 +72,7 @@ export default function Home() {
                     </ListGroup.Item>
                 </LinkContainer>
                 {notes.map(({ noteId, content, createdAt, attachment }) => {
-                   const imageUrl = attachment ? `https://note-api-uploads.s3.us-east-1.amazonaws.com/${attachment}` : null;
+                    const imageUrl = attachment ? `${BASE_URL}/${attachment}` : null;
 
                     return (
                         <LinkContainer key={noteId} to={`/notes/${noteId}`}>
@@ -117,17 +124,17 @@ export default function Home() {
     function renderNotes() {
         return (
             <div className="notes">
-                {/* <h2>
+                <h2>
                     Welcome, <span>{greet}</span>
-                </h2> */}
+                </h2>
                 <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
                 <Form className="mb-3">
-                    {/* <Form.Control
+                    <Form.Control
                         type="text"
                         placeholder="Search notes..."
                         value={searchTerm}
                         onChange={handleSearch}
-                    /> */}
+                    />
                 </Form>
                 {!isLoading ? (
                     <ListGroup>{renderNotesList(filteredNotes)}</ListGroup>
