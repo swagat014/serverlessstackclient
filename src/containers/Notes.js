@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import Button from "react-bootstrap/Button"; // Import Button for the back button
 import { API, Storage } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 import Form from "react-bootstrap/Form";
@@ -109,6 +110,13 @@ export default function Notes() {
 
     return (
         <div className="Notes">
+            <Button
+                variant="secondary"
+                className="mb-3"
+                onClick={() => history.goBack()} // Navigate back to the previous page
+            >
+                Back
+            </Button>
             {note && (
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="content">

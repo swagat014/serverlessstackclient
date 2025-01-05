@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button"; // Import Button for the back button
 import { useHistory } from "react-router-dom";
 import { API } from "aws-amplify";
 import LoaderButton from "../components/LoaderButton";
@@ -48,15 +49,15 @@ export default function NewNote() {
 
         setIsLoading(true);
         try {
-             // Upload file to S3 if it exists
-             const attachment = file.current
-             ? await s3Upload(file.current)
-             : null;
+            // Upload file to S3 if it exists
+            const attachment = file.current
+                ? await s3Upload(file.current)
+                : null;
 
-         // Create note with the attachment key
-         await createNote({ content, attachment });
+            // Create note with the attachment key
+            await createNote({ content, attachment });
 
-         history.push("/");
+            history.push("/");
             history.push("/"); // Redirect to the home page
         } catch (e) {
             onError(e);
@@ -72,6 +73,14 @@ export default function NewNote() {
 
     return (
         <div className="NewNote">
+            <Button
+                variant="secondary"
+                className="mb-3"
+                onClick={() => history.goBack()} // Navigate back to the previous page
+            >
+                Back
+            </Button>
+
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="content">
                     <Form.Control

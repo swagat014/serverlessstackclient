@@ -8,6 +8,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { API } from "aws-amplify";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+
 import "./Home.css";
 
 export default function Home() {
@@ -17,6 +18,9 @@ export default function Home() {
     const [greet, setGreet] = useState();
     const { isAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5); // You can adjust the number of items per page
+
 
     useEffect(() => {
         async function onLoad() {
@@ -62,6 +66,10 @@ export default function Home() {
 
     const BASE_URL = "https://note-api-uploads.s3.us-east-1.amazonaws.com";
 
+    const indexOfLastNote = currentPage * itemsPerPage;
+    const indexOfFirstNote = indexOfLastNote - itemsPerPage;
+    const currentNotes = filteredNotes.slice(indexOfFirstNote, indexOfLastNote);
+
     function renderNotesList(notes) {
         return (
             <>
@@ -104,6 +112,28 @@ export default function Home() {
         );
     }
 
+    function renderPagination() {
+        const totalPages = Math.ceil(filteredNotes.length / itemsPerPage);
+
+        return (
+            <div className="pagination">
+                <Button 
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                    Previous
+                </Button>
+                <span>{`Page ${currentPage} of ${totalPages}`}</span>
+                <Button 
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                    Next
+                </Button>
+            </div>
+        );
+    }
+
     function renderLander() {
         return (
             <div className="lander">
@@ -137,7 +167,10 @@ export default function Home() {
                     />
                 </Form>
                 {!isLoading ? (
-                    <ListGroup>{renderNotesList(filteredNotes)}</ListGroup>
+                     <>
+                     <ListGroup>{renderNotesList(currentNotes)}</ListGroup>
+                     {renderPagination()}
+                 </>
                 ) : (
                     <p>Loading notes...</p>
                 )}

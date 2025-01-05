@@ -20,6 +20,8 @@ export default function Signup() {
     const [newUser, setNewUser] = useState(null);
     const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirmPassword
 
     function validateForm() {
         return (
@@ -105,19 +107,41 @@ export default function Signup() {
                 </Form.Group>
                 <Form.Group controlId="password" size="lg">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={fields.password}
-                        onChange={handleFieldChange}
-                    />
+                    <div className="password-container">
+                        <Form.Control
+                            type={showPassword ? "text" : "password"}
+                            value={fields.password}
+                            onChange={handleFieldChange}
+                        />
+                        <span
+                            className="toggle-password"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            <img
+                                src={showPassword ? "/images/hide-password.png" : "/images/show-password.png"}
+                                alt={showPassword ? "Hide password" : "Show password"}
+                                style={{ width: "20px", cursor: "pointer" }}
+                            />                        </span>
+                    </div>
                 </Form.Group>
                 <Form.Group controlId="confirmPassword" size="lg">
                     <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        onChange={handleFieldChange}
-                        value={fields.confirmPassword}
-                    />
+                    <div className="password-container">
+                        <Form.Control
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={fields.confirmPassword}
+                            onChange={handleFieldChange}
+                        />
+                        <span
+                            className="toggle-password"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                            <img
+                                src={showPassword ? "/images/hide-password.png" : "/images/show-password.png"}
+                                alt={showPassword ? "Hide password" : "Show password"}
+                                style={{ width: "20px", cursor: "pointer" }}
+                            />                        </span>
+                    </div>
                 </Form.Group>
                 <LoaderButton
                     block

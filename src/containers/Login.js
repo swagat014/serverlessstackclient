@@ -13,6 +13,7 @@ export default function Login() {
     const history = useHistory();
     const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
     const [fields, handleFieldChange] = useFormFields({
         email: "",
         password: ""
@@ -47,11 +48,22 @@ export default function Login() {
                 </Form.Group>
                 <Form.Group size="lg" controlId="password">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={fields.password}
-                        onChange={handleFieldChange}
-                    />
+                    <div className="password-container">
+                        <Form.Control
+                            type={showPassword ? "text" : "password"}
+                            value={fields.password}
+                            onChange={handleFieldChange}
+                        />
+                        <span
+                            className="toggle-password"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            <img
+                                src={showPassword ? "/images/hide-password.png" : "/images/show-password.png"}
+                                alt={showPassword ? "Hide password" : "Show password"}
+                                style={{ width: "20px", cursor: "pointer" }}
+                            />                        </span>
+                    </div>
                 </Form.Group>
                 <LinkContainer to="/forget">
                     <h6 className="forgetPassword">

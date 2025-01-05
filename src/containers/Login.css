@@ -7,6 +7,20 @@
     cursor: pointer;
 }
 
+.password-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.toggle-password img {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
 @media all and (min-width: 480px) {
     .Login {
         padding: 60px 0;
