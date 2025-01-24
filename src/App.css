@@ -1,3 +1,80 @@
-.App {
+/* Navbar styles */
+.custom-navbar {
+    background-color: #4e73df !important; /* Modern blue theme */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slight shadow for a floating effect */
+    padding: 10px 20px; /* Add padding for better spacing */
+    border-radius: 8px;
 }
 
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white !important; /* White text for brand name */
+    font-family: "Roboto", sans-serif;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.nav-link {
+    color: white !important;
+    font-size: 1rem;
+    margin-left: 10px;
+    font-family: "Roboto", sans-serif;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #d1d3e2 !important; /* Light gray on hover */
+    text-decoration: none;
+}
+
+.nav-link-logout {
+    color: #ff4c4c !important; /* Red logout button */
+    font-weight: bold;
+}
+
+.nav-link-logout:hover {
+    color: #ff0000 !important; /* Brighter red on hover */
+}
+
+/* Navbar toggle (hamburger menu) */
+.navbar-toggler-icon {
+    background-color: white !important; /* White menu icon */
+    border-radius: 3px;
+    width: 30px;
+    height: 2px;
+    position: relative;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+    content: "";
+    background-color: white;
+    border-radius: 3px;
+    width: 30px;
+    height: 2px;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before {
+    top: -8px;
+}
+
+.navbar-toggler-icon::after {
+    top: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.3rem;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+    }
+}

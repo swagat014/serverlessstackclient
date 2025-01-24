@@ -1,10 +1,38 @@
-.forgetPassword {
-    text-align: right;
-    padding-bottom: 5px;
+body {
+    background-color: #f4f6f9;
+    font-family: "Roboto", sans-serif;
 }
 
-.forgetPassword:hover {
-    cursor: pointer;
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.login-card {
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    animation: slideIn 0.5s ease-in-out;
+}
+
+.login-card h2 {
+    color: #4e73df;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.login-card p {
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 30px;
 }
 
 .password-container {
@@ -13,33 +41,54 @@
     position: relative;
 }
 
-.toggle-password img {
+.password-container .toggle-password {
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
 }
 
+.forget-password {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #4e73df;
+    cursor: pointer;
+    transition: color 0.3s;
+}
 
-@media all and (min-width: 480px) {
-    .Login {
-        padding: 60px 0;
+.forget-password:hover {
+    color: #375a7f;
+}
+
+.login-button {
+    background: #4e73df;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.login-button:hover {
+    background: #375a7f;
+    transform: scale(1.02);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-
-    .Login form {
-        margin: 0 auto;
-        max-width: 320px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
 
-    .Login h2 {
-        padding-bottom: 25px;
-        font-family: sans-serif;
+@media (max-width: 576px) {
+    .login-card {
+        padding: 20px;
     }
-
-    .Login form a {
-        margin-bottom: 15px;
-        display: block;
-        font-size: 14px;
-    }
-
 }

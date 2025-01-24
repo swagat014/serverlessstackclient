@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import Button from "react-bootstrap/Button"; // Import Button for the back button
+import Button from "react-bootstrap/Button";
 import { API, Storage } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 import Form from "react-bootstrap/Form";
@@ -17,16 +17,14 @@ export default function Notes() {
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+
     useEffect(() => {
-        function loadNote() {
-            return API.get("notes", `/notes/${id}`);
-        }
         async function onLoad() {
             try {
-                const note = await loadNote();
+                const note = await API.get("notes", `/notes/${id}`);
                 const { content, attachment } = note;
-                console.log("note.attachment:", attachment); // Debugging here
-                note.attachment = attachment || ""; // Ensures attachment is at least an empty string
+
+                note.attachment = attachment || "";
                 if (attachment) {
                     note.attachmentURL = await Storage.vault.get(attachment);
                 }
@@ -44,10 +42,6 @@ export default function Notes() {
     }
 
     function formatFilename(str) {
-        if (typeof str !== "string") {
-            console.error("Invalid filename:", str); // Logs if the type is incorrect
-            return ""; // Returns a default empty string to prevent crashes
-        }
         return str.replace(/^\w+-/, "");
     }
 
@@ -55,31 +49,26 @@ export default function Notes() {
         file.current = event.target.files[0];
     }
 
-    function saveNote(note) {
-        return API.put("notes", `/notes/${id}`, {
-            body: note,
-        });
-    }
     async function handleSubmit(event) {
-        let attachment;
         event.preventDefault();
+
         if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
             alert(
-                `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000
-                } MB.`
+                `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000} MB.`
             );
             return;
         }
+
         setIsLoading(true);
         try {
-            if (file.current) {
-                attachment = await s3Upload(file.current);
-                console.log("Uploaded attachment(S3 key):", attachment);
-            }
-            await saveNote({
-                content,
-                attachment: attachment || note.attachment
+            const attachment = file.current
+                ? await s3Upload(file.current)
+                : note.attachment;
+
+            await API.put("notes", `/notes/${id}`, {
+                body: { content, attachment },
             });
+
             history.push("/");
         } catch (e) {
             onError(e);
@@ -87,20 +76,17 @@ export default function Notes() {
         }
     }
 
-    function deleteNote() {
-        return API.del("notes", `/notes/${id}`);
-    }
     async function handleDelete(event) {
         event.preventDefault();
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this note?"
-        );
+
+        const confirmed = window.confirm("Are you sure you want to delete this note?");
         if (!confirmed) {
             return;
         }
+
         setIsDeleting(true);
         try {
-            await deleteNote();
+            await API.del("notes", `/notes/${id}`);
             history.push("/");
         } catch (e) {
             onError(e);
@@ -109,26 +95,33 @@ export default function Notes() {
     }
 
     return (
-        <div className="Notes">
-            <Button
-                variant="secondary"
-                className="mb-3"
-                onClick={() => history.goBack()} // Navigate back to the previous page
-            >
-                Back
-            </Button>
+        <div className="notes-container">
+            <div className="notes-header">
+                <Button
+                    variant="secondary"
+                    className="back-button"
+                    onClick={() => history.goBack()}
+                >
+                    Back
+                </Button>
+                <h2>Edit Note</h2>
+            </div>
+
             {note && (
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="content">
                         <Form.Control
                             as="textarea"
+                            rows={5}
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
+                            className="note-textarea"
                         />
                     </Form.Group>
+
                     <Form.Group controlId="file">
-                        <Form.Label>Attachment</Form.Label>
-                        {note.attachment && typeof note.attachment === "string" && (
+                        <Form.Label className="file-label">Attachment</Form.Label>
+                        {note.attachment && (
                             <p>
                                 <a
                                     target="_blank"
@@ -139,27 +132,36 @@ export default function Notes() {
                                 </a>
                             </p>
                         )}
-
-                        <Form.Control onChange={handleFileChange} type="file" />
+                        <Form.Control
+                            type="file"
+                            onChange={handleFileChange}
+                            className="file-input"
+                        />
                     </Form.Group>
-                    <LoaderButton
-                        block
-                        size="lg"
-                        type="submit"
-                        isLoading={isLoading}
-                        disabled={!validateForm()}
-                    >
-                        Save
-                    </LoaderButton>
-                    <LoaderButton
-                        block
-                        size="lg"
-                        variant="danger"
-                        onClick={handleDelete}
-                        isLoading={isDeleting}
-                    >
-                        Delete
-                    </LoaderButton>
+
+                    <div className="action-buttons">
+                        <LoaderButton
+                            block
+                            size="lg"
+                            type="submit"
+                            isLoading={isLoading}
+                            disabled={!validateForm()}
+                            className="save-button"
+                        >
+                            Save
+                        </LoaderButton>
+
+                        <LoaderButton
+                            block
+                            size="lg"
+                            variant="danger"
+                            onClick={handleDelete}
+                            isLoading={isDeleting}
+                            className="delete-button"
+                        >
+                            Delete
+                        </LoaderButton>
+                    </div>
                 </Form>
             )}
         </div>

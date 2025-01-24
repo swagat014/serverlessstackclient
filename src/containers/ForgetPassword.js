@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
 import "./ForgetPassword.css";
+
 export default function ForgetPassword() {
     const history = useHistory();
     const [email, setEmail] = useState("");
@@ -21,13 +22,6 @@ export default function ForgetPassword() {
         return confirmationCode.length > 0 && password.length > 0;
     }
 
-    function handleEmailChange(e) {
-        setEmail(e.target.value);
-    }
-    function handlePasswordChange(e) {
-        setPassword(e.target.value);
-    }
-
     async function handleSubmit(e) {
         e.preventDefault();
         setIsLoading(true);
@@ -41,20 +35,11 @@ export default function ForgetPassword() {
         }
     }
 
-    function handleCodeChange(e) {
-        setConfirmationCode(e.target.value);
-    }
-
-    function handleConfirmPasswordChange(e) {
-        setConfirmPassword(e.target.value);
-    }
-
     async function handleConfirmationSubmit(e) {
         e.preventDefault();
         setIsLoading(true);
         try {
             await Auth.forgotPasswordSubmit(email, confirmationCode, password);
-
             history.push("/login");
         } catch (e) {
             alert(e);
@@ -66,15 +51,14 @@ export default function ForgetPassword() {
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="email" size="lg">
-                    <Form.Label>Enter your Email: </Form.Label>
+                    <Form.Label>Enter your Email</Form.Label>
                     <Form.Control
                         autoFocus
                         type="email"
                         value={email}
-                        onChange={handleEmailChange}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </Form.Group>
-
                 <LoaderButton
                     block
                     size="lg"
@@ -82,6 +66,7 @@ export default function ForgetPassword() {
                     variant="success"
                     isLoading={isLoading}
                     disabled={!validateForm()}
+                    className="loader-button"
                 >
                     Send Code
                 </LoaderButton>
@@ -97,8 +82,8 @@ export default function ForgetPassword() {
                     <Form.Control
                         autoFocus
                         type="tel"
-                        onChange={handleCodeChange}
                         value={confirmationCode}
+                        onChange={(e) => setConfirmationCode(e.target.value)}
                     />
                     <Form.Text muted>Please check your email for the code.</Form.Text>
                 </Form.Group>
@@ -107,15 +92,15 @@ export default function ForgetPassword() {
                     <Form.Control
                         type="password"
                         value={password}
-                        onChange={handlePasswordChange}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
-                <Form.Group controlId="password" size="lg">
+                <Form.Group controlId="confirmPassword" size="lg">
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
                         type="password"
                         value={confirmPassword}
-                        onChange={handleConfirmPasswordChange}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                 </Form.Group>
                 <LoaderButton
@@ -125,6 +110,7 @@ export default function ForgetPassword() {
                     variant="success"
                     isLoading={isLoading}
                     disabled={!validateConfirmationForm()}
+                    className="loader-button"
                 >
                     Submit
                 </LoaderButton>
@@ -133,9 +119,11 @@ export default function ForgetPassword() {
     }
 
     return (
-        <div className="Forget">
-            <h2 className="text-center">Forget Password</h2>
-            {newUser === null ? renderForm() : renderConfirmationForm()}
+        <div className="forget-container">
+            <div className="forget-card">
+                <h2>Forget Password</h2>
+                {newUser === null ? renderForm() : renderConfirmationForm()}
+            </div>
         </div>
     );
 }

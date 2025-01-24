@@ -73,58 +73,58 @@ export default function Home() {
     function renderNotesList(notes) {
         return (
             <>
-                <LinkContainer to="/notes/new">
-                    <ListGroup.Item action className="py-3 text-nowrap text-truncate">
-                        <BsPencilSquare size={17} />
-                        <span className="ml-2 font-weight-bold">Create a new note</span>
-                    </ListGroup.Item>
-                </LinkContainer>
-                {notes.map(({ noteId, content, createdAt, attachment }) => {
-                    const imageUrl = attachment ? `${BASE_URL}/${attachment}` : null;
+                <div className="notes-grid">
+                    <LinkContainer to="/notes/new">
+                        <div className="note-card create-new-card">
+                            <BsPencilSquare size={30} />
+                            <h5>Create a new note</h5>
+                        </div>
+                    </LinkContainer>
+                    {notes.map(({ noteId, content, createdAt, attachment }) => {
+                        const imageUrl = attachment
+                            ? `${BASE_URL}/${attachment}`
+                            : "/default-image.png"; // Fallback image
 
-                    return (
-                        <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-                            <ListGroup.Item action className="d-flex align-items-center">
-                                {imageUrl && (
+                        return (
+                            <LinkContainer key={noteId} to={`/notes/${noteId}`}>
+                                <div className="note-card">
                                     <img
+                                        className="card-img-top"
                                         src={imageUrl}
-                                        alt={`Note ${content.trim().split("\n")[0] || "Image"}`}
-                                        className="note-image"
-                                        onError={(e) =>
-                                            (e.target.src = "/default-image.png")
-                                        }
+                                        alt={`Note ${content}`}
+                                        onError={(e) => (e.target.src = "/default-image.png")}
                                     />
-                                )}
-                                <div>
-                                    <span className="font-weight-bold">
-                                        {content.trim().split("\n")[0]}
-                                    </span>
-                                    <br />
-                                    <span className="text-muted">
-                                        Created: {new Date(createdAt).toLocaleString()}
-                                    </span>
+                                    <div className="card-body">
+                                        <h5 className="card-title">
+                                            {content.trim().split("\n")[0]}
+                                        </h5>
+                                        <p className="card-text">
+                                            Created: {new Date(createdAt).toLocaleString()}
+                                        </p>
+                                    </div>
                                 </div>
-                            </ListGroup.Item>
-                        </LinkContainer>
-                    );
-                })}
+                            </LinkContainer>
+                        );
+                    })}
+                </div>
             </>
         );
     }
+
 
     function renderPagination() {
         const totalPages = Math.ceil(filteredNotes.length / itemsPerPage);
 
         return (
             <div className="pagination">
-                <Button 
+                <Button
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage(currentPage - 1)}
                 >
                     Previous
                 </Button>
                 <span>{`Page ${currentPage} of ${totalPages}`}</span>
-                <Button 
+                <Button
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage(currentPage + 1)}
                 >
@@ -137,19 +137,25 @@ export default function Home() {
     function renderLander() {
         return (
             <div className="lander">
-                <h1>Scratch</h1>
-                <p className="text-muted">A simple note-taking app</p>
-                <div className="box">
-                    <LinkContainer to="/signup">
-                        <Button variant="success">Sign up</Button>
-                    </LinkContainer>
-                    <LinkContainer to="/login">
-                        <Button className="ml-4" variant="primary">Login</Button>
-                    </LinkContainer>
+                <div className="hero">
+                    <h1 className="hero-title">Scratch</h1>
+                    <p className="hero-subtitle">A simple, elegant note-taking app</p>
+                    <div className="hero-buttons">
+                        <LinkContainer to="/signup">
+                            <Button className="hero-button signup">Sign Up</Button>
+                        </LinkContainer>
+                        <LinkContainer to="/login">
+                            <Button className="hero-button login">Login</Button>
+                        </LinkContainer>
+                    </div>
                 </div>
             </div>
         );
+
+
     }
+
+
 
     function renderNotes() {
         return (
@@ -167,13 +173,22 @@ export default function Home() {
                     />
                 </Form>
                 {!isLoading ? (
-                     <>
-                     <ListGroup>{renderNotesList(currentNotes)}</ListGroup>
-                     {renderPagination()}
-                 </>
+                    <>
+                        <ListGroup>{renderNotesList(currentNotes)}</ListGroup>
+                        {renderPagination()}
+                    </>
                 ) : (
-                    <p>Loading notes...</p>
+                    <div className="loading-notes-container">
+                        <div className="spinner">
+                            <div className="dot dot1"></div>
+                            <div className="dot dot2"></div>
+                            <div className="dot dot3"></div>
+                        </div>
+                        <p className="loading-text">Loading your notes...</p>
+                    </div>
                 )}
+
+
             </div>
         );
     }

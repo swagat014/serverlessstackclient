@@ -39,33 +39,33 @@ function App() {
   return (
     !isAuthenticating && (
       <div className="App container py-3">
-        <Navbar collapseOnSelect bg="light" expand="md">
+        <Navbar collapseOnSelect bg="light" expand="md" className="custom-navbar">
           <LinkContainer to="/">
-            <Navbar.Brand className="font-weight-bold text-muted">
-              Scratch
-            </Navbar.Brand>
+            <Navbar.Brand className="navbar-brand">Scratch</Navbar.Brand>
           </LinkContainer>
-          <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
             <Nav activeKey={window.location.pathname}>
               {isAuthenticated ? (
                 <>
-                 
-                  <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                  <Nav.Link onClick={handleLogout} className="nav-link-logout">
+                    Logout
+                  </Nav.Link>
                 </>
               ) : (
                 <>
                   <LinkContainer to="/signup">
-                    <Nav.Link>Signup</Nav.Link>
+                    <Nav.Link className="nav-link">Signup</Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/login">
-                    <Nav.Link>Login</Nav.Link>
+                    <Nav.Link className="nav-link">Login</Nav.Link>
                   </LinkContainer>
                 </>
               )}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+
         <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
           <Routes />
         </AppContext.Provider>

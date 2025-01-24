@@ -1,25 +1,13 @@
 import React, { useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button"; // Import Button for the back button
+import Button from "react-bootstrap/Button";
 import { useHistory } from "react-router-dom";
 import { API } from "aws-amplify";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
 import config from "../config";
-import { s3Upload } from "../libs/awsLib"; // Import s3Upload
+import { s3Upload } from "../libs/awsLib";
 import "./NewNote.css";
-
-// Function to convert a file to base64
-// function encodeFileToBase64(file) {
-//     return new Promise((resolve, reject) => {
-//         const reader = new FileReader();
-//         reader.onloadend = () => {
-//             resolve(reader.result.split(",")[1]); // Extract base64 part from result
-//         };
-//         reader.onerror = reject;
-//         reader.readAsDataURL(file);
-//     });
-// }
 
 export default function NewNote() {
     const file = useRef(null);
@@ -38,27 +26,22 @@ export default function NewNote() {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        // Validate file size
         if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
             alert(
-                `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000
-                } MB.`
+                `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000} MB.`
             );
             return;
         }
 
         setIsLoading(true);
         try {
-            // Upload file to S3 if it exists
             const attachment = file.current
                 ? await s3Upload(file.current)
                 : null;
 
-            // Create note with the attachment key
             await createNote({ content, attachment });
 
             history.push("/");
-            history.push("/"); // Redirect to the home page
         } catch (e) {
             onError(e);
             setIsLoading(false);
@@ -72,34 +55,44 @@ export default function NewNote() {
     }
 
     return (
-        <div className="NewNote">
-            <Button
-                variant="secondary"
-                className="mb-3"
-                onClick={() => history.goBack()} // Navigate back to the previous page
-            >
-                Back
-            </Button>
-
+        <div className="new-note-container">
+            <div className="new-note-header">
+                <Button
+                    variant="danger"
+                    className="back-button"
+                    onClick={() => history.goBack()}
+                >
+                    Back
+                </Button>
+                <h2>Create a New Note</h2>
+            </div>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="content">
                     <Form.Control
-                        value={content}
                         as="textarea"
+                        rows={5}
+                        placeholder="Write your note here..."
+                        value={content}
                         onChange={(e) => setContent(e.target.value)}
+                        className="note-textarea"
                     />
                 </Form.Group>
                 <Form.Group controlId="file">
-                    <Form.Label>Attachment</Form.Label>
-                    <Form.Control onChange={handleFileChange} type="file" />
+                    <Form.Label className="file-label">Attachment</Form.Label>
+                    <Form.Control
+                        type="file"
+                        onChange={handleFileChange}
+                        className="file-input"
+                    />
                 </Form.Group>
                 <LoaderButton
                     block
                     type="submit"
                     size="lg"
-                    variant="primary"
+                    variant="success"
                     isLoading={isLoading}
                     disabled={!validateForm()}
+                    className="create-button"
                 >
                     Create
                 </LoaderButton>
