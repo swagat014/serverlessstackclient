@@ -31,12 +31,12 @@
 }
 
 .nav-link-logout {
-    color: #ff4c4c !important; /* Red logout button */
+    color: #f8f8f8 !important; /* Red logout button */
     font-weight: bold;
 }
 
 .nav-link-logout:hover {
-    color: #ff0000 !important; /* Brighter red on hover */
+    color: #4f0202 !important; /* Brighter red on hover */
 }
 
 /* Navbar toggle (hamburger menu) */

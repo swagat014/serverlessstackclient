@@ -70,46 +70,66 @@ export default function Home() {
     const indexOfFirstNote = indexOfLastNote - itemsPerPage;
     const currentNotes = filteredNotes.slice(indexOfFirstNote, indexOfLastNote);
 
-    function renderNotesList(notes) {
-        return (
-            <>
-                <div className="notes-grid">
-                    <LinkContainer to="/notes/new">
-                        <div className="note-card create-new-card">
-                            <BsPencilSquare size={30} />
-                            <h5>Create a new note</h5>
-                        </div>
-                    </LinkContainer>
-                    {notes.map(({ noteId, content, createdAt, attachment }) => {
-                        const imageUrl = attachment
-                            ? `${BASE_URL}/${attachment}`
-                            : "/default-image.png"; // Fallback image
+   function renderNotesList(notes) {
+    return (
+        <>
+            <div className="notes-grid">
+                <LinkContainer to="/notes/new">
+                    <div className="note-card create-new-card">
+                        <BsPencilSquare size={30} />
+                        <h5>Create a new note</h5>
+                    </div>
+                </LinkContainer>
+                {notes.map(({ noteId, content, createdAt, attachment, userId }) => {
+                        const safeContent = typeof content === "string" ? content : "No content available";
+                        const safeAttachment = typeof attachment === "string" ? attachment : null;
 
-                        return (
-                            <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-                                <div className="note-card">
+                        const filePath = `private/${userId}/${safeAttachment}`;
+                        const encodedKey = encodeURIComponent(filePath);
+                        const imageUrl = `${BASE_URL}/${encodedKey}`;
+                    return (
+                        <LinkContainer key={noteId} to={`/notes/${noteId}`}>
+                            <div className="note-card">
+                            {imageUrl && (
                                     <img
-                                        className="card-img-top"
                                         src={imageUrl}
-                                        alt={`Note ${content}`}
+                                        alt={`Note ${safeContent.trim().split("\n")[0]}`}
+                                        className="note-image"
                                         onError={(e) => (e.target.src = "/default-image.png")}
                                     />
-                                    <div className="card-body">
-                                        <h5 className="card-title">
-                                            {content.trim().split("\n")[0]}
-                                        </h5>
-                                        <p className="card-text">
-                                            Created: {new Date(createdAt).toLocaleString()}
-                                        </p>
-                                    </div>
+                                )}
+                                 <div className="note-content">
+                                    <span className="font-weight-bold">
+                                        {safeContent.trim().split("\n")[0]}
+                                    </span>
                                 </div>
-                            </LinkContainer>
-                        );
-                    })}
-                </div>
-            </>
-        );
-    }
+                                <div className="note-actions">
+                                    <LinkContainer to={`/notes/${noteId}`}>
+                                        <Button variant="primary" size="sm" className="mr-2">
+                                            Show
+                                        </Button>
+                                    </LinkContainer>
+                                </div>
+                            
+                                <div className="card-body">
+                                    <h5 className="card-title">
+                                        {content.trim().split("\n")[0]}
+                                    </h5>
+                                    <p className="card-text">
+                                        Created: {new Date(createdAt).toLocaleString()}
+                                    </p>
+                                </div>
+                            </div>
+                        </LinkContainer>
+                    );
+                })}
+            </div>
+        </>
+    );
+}
+
+
+
 
 
     function renderPagination() {

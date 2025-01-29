@@ -92,3 +92,12 @@ body {
         padding: 20px;
     }
 }
+/* Form labels - Change to black */
+.login-card label {
+    color: #000000; /* Set label text color to black */
+    font-size: 16px;
+    font-weight: normal; /* Optional: Adjust font weight for labels */
+    display: block;
+    margin-bottom: 8px; /* Space between label and input */
+    padding-top: 10px;
+}

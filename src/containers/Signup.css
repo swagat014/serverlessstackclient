@@ -83,3 +83,12 @@ body {
         padding: 20px;
     }
 }
+
+.signup-card label {
+    color: #000000; /* Set label text color to black */
+    font-size: 16px;
+    font-weight: normal; /* Optional: Adjust font weight for labels */
+    display: block;
+    margin-bottom: 8px; /* Space between label and input */
+    padding-top: 10px;
+}
